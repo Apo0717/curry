@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>咖哩大食記</title>
+  <link rel="stylesheet" href="table.css">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+</head>
+
+<body>
+  <div class="cate-bar">
+    <div class="cate cate-shadow">
+      <img class="curry-icon" src="img/unnamed.gif" alt="">
+      咖哩??
+    </div>
+    <div class="cate">好吃的拉麵</div>
+  </div>
+  <div class="container" id="curryAll">
+    <!-- 搜尋 -->
+    <div class="search-bar">
+      <input class="search-input" type="text" placeholder="輸入店家名稱" v-model="searchText"
+        @keyup.enter="searchName(searchText)" @keyup="reset(searchText)">
+      <div class="search-btn" @click="searchName(searchText)">開始找</div>
+    </div>
+    <!-- 表單 -->
+    <div>
+      <!-- 頭 -->
+      <div class="row-head">
+        <div class="title-box bd-r eat-check cursor">
+          <i class="fas fa-sort-down"></i>
+        </div>
+        <div class="title-box bd-r location cursor" @click="isDrop = !isDrop">
+          地點&nbsp&nbsp<i class="fas fa-sort-down"></i>
+          <div class="dropdown-btn">
+            <div class="dropdown-content" v-show="isDrop" v-for="(lo,key) in selectLocation" :key="key"
+              @click="filterLocation(lo,key)">{{lo}}</div>
+          </div>
+        </div>
+        <div class="dropdown-menu" id="locationAll"></div>
+        <div class="title-box bd-r food-img">圖片</div>
+        <div class="title-box bd-r name">店名</div>
+        <div class="title-box bd-r web">網站</div>
+        <div class="title-box bd-r adress">地址</div>
+        <div class="title-box bd-r phone">電話</div>
+        <div class="title-box bd-r open">營業時間</div>
+        <div class="title-box repo">心得</div>
+      </div>
+
+      <!-- 身體 -->
+      <div class="row-body" v-for="(item,k) in thisPageShow" :key="k">
+        <div class="d-f">
+          <div class="store-box eat-check">
+            <input type="checkbox" v-model="item.isTasted">
+          </div>
+          <div class="store-box location">{{item.location}}</div>
+          <div class="store-box food-img"><img :src="imgSrc" alt="/"></div>
+          <div class="store-box name">{{item.name}}</div>
+          <div class="store-box web">
+            <a :href='item.web' target="_blank" title="店家網站">
+              <i class="sns-i fas fa-home" title="店家網頁" v-show="item.web"></i>
+            </a>
+            <a :href='item.fb' target="_blank" title="FB粉絲專頁">
+              <i class="sns-i fab fa-facebook-square" title="Facebook粉絲專頁" v-show="item.fb"></i>
+            </a>
+            <a :href='item.ig' target="_blank" title="">
+              <i class="sns-i fab fa-instagram" title="官方Instagram" v-show="item.ig"></i>
+            </a>
+          </div>
+          <div class="store-box adress">{{item.adress}}</div>
+          <div class="store-box phone">{{item.phone}}</div>
+          <div class="store-box open" v-html="item.open"></div>
+          <div class="store-box repo">
+            <i class=" cursor fas chevron fa-chevron-down" :class="item.objClass" @click="clickRepo(item)"
+              v-show="item.repo[0].repoText"></i>
+          </div>
+        </div>
+        <!-- 身體-展開的心得 -->
+        <div class="row-repo d-f" :class="item.repoClass">
+          <div class="repoImg">
+            <img class="repoImg-100" :src="item.repo[0].repoImg" alt="/">
+          </div>
+          <div class="repo-text-area">
+            <div class="day-time">2021-0825</div>
+            <div class="recommend">個人推薦度：{{item.repo[0].repoStar}}</div>
+            <div>
+              {{item.repo[0].repoText}}
+            </div>
+            <div class="d-f-b">
+              <div class="close cursor" @click="clickRepo(item)">
+                收起 <i class="fas fa-chevron-up"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 頁碼 -->
+      <div class="d-f pages-num">
+        <button class="btn-page">上一頁</button>
+        <!-- {{pageNumber}}
+        {{pageNumArr}} -->
+        <div v-for="page in pageNumArr" @click.prevent="changePage(page)">{{page}} </div>
+        <button class="btn-page">下一頁</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    let curryAll = new Vue({
+      el: '#curryAll',
+      data: {
+        isDrop: false,
+        selectLocation: ['全部', '臺北', '新北', '臺中', '臺南', '日本'],
+        arrDataCurry: [
+          {
+            storeId: '',
+            isTasted: false,
+            location: '臺北 ／ 中山',
+            imgSrc: ':D',
+            name: '稻町家',
+            web: false,
+            fb: 'https://www.facebook.com/tongan.curry/',
+            ig: false,
+            adress: '2, No. 87-1號南京西路大同區台北市103',
+            phone: '02 2562 2050',
+            open: '週二 ～ 週日<br>11:30 - 21:30<br>⛔️星期一公休',
+            isRepo: true,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: '',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            }
+          },
+          {
+            storeId: '',
+            isTasted: false,
+            location: '臺北 ／ 信義安和',
+            imgSrc: ':D',
+            name: '通庵熟成咖哩',
+            web: false,
+            fb: 'https://www.facebook.com/tongan.curry/',
+            ig: false,
+            adress: '106台北市大安區通安街115號(信義安和站３號出口)',
+            phone: '02 2562 2050',
+            open: '12:00 - 14:30<br>17:30 - 21:30',
+            isRepo: false,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique ut dolorem molestias alias nonvoluptatum, animi consectetur blanditiis dicta nemo impedit? Possimus suscipit sit a quis? Ea doloribus,sed placeat, deleniti odio esse ullam dolore nesciunt enim neque fugiat, ducimus saepe accusamus inventorequisquam explicabo iure blanditiis vel fugit? Magnam, libero modi.Recusandae at neque perferendisrepudiandae dolore, magnam explicabo.',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            }
+          },
+          {
+            storeId: '',
+            isTasted: true,
+            location: '新北／新莊',
+            imgSrc: ':D',
+            name: '喜歡咖哩',
+            web: false,
+            fb: 'https://www.facebook.com/Lovecurry0606/?ref=page_internal',
+            ig: 'https://www.instagram.com/lovecurry0606/?hl=zh-tw',
+            adress: '242新北市新莊區北63-1鄉道246-258(三角公園附近)',
+            phone: '02 2992 7676',
+            open: '11:30 - 14:00<br>17:00 - 21:00',
+            isRepo: false,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: '咖哩醬偏少...不夠熱，表現可以，但CP值普通，德腸好吃，金萱奶茶不要點。',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            }
+          }
+          ,
+          {
+            storeId: '',
+            isTasted: false,
+            location: '臺北 / 大安',
+            imgSrc: ':D',
+            name: '佐藤咖哩 (和平店)',
+            web: false,
+            fb: 'https://www.facebook.com/satocurry',
+            ig: 'https://www.instagram.com/satocurry/?hl=zh-tw',
+            adress: '106台北市大安區和平東路三段228巷9號',
+            phone: '02 8732 6523',
+            open: '11:30 - 14:30<br>17:30 - 21:00',
+            isRepo: false,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: '',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            }
+          }
+          ,
+          {
+            storeId: '',
+            isTasted: false,
+            location: '臺北 / 大安',
+            imgSrc: ':D',
+            name: '佐藤咖哩 (復興店)',
+            web: false,
+            fb: 'https://www.facebook.com/satocurryfuxing/',
+            ig: 'https://www.instagram.com/satocurry/?hl=zh-tw',
+            adress: '106台北市大安區復興南路一段92之1號',
+            phone: '02 2711 1967',
+            open: '11:30 - 14:30<br>17:30 - 21:00',
+            isRepo: false,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: '',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            }
+          }
+          ,
+          {
+            storeId: '',
+            isTasted: false,
+            location: '臺北 / 大安',
+            imgSrc: ':D',
+            name: 'NoName 無名咖哩',
+            web: false,
+            fb: 'https://www.facebook.com/NoName%E5%92%96%E5%93%A9%E3%82%AB%E3%83%AC%E3%83%BC%E3%83%A9%E3%82%A4%E3%82%B9%E5%B0%88%E9%96%80%E5%BA%97-188120185122265',
+            ig: 'https://www.instagram.com/noname201802/?hl=zh-tw',
+            adress: '106台北市大安區信義路三段166巷3-1(大安站3號出口 轉角處)',
+            phone: '02 2703 8813',
+            open: '11:00 – 14:00<br>16:00 – 20:00<br>⛔️星期日',
+            isRepo: false,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: '',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            }
+          },
+          {
+            storeId: '',
+            isTasted: false,
+            location: '臺南 / 中西區',
+            imgSrc: ':D',
+            name: 'Cocokara cafe&湯咖哩',
+            web: false,
+            fb: 'https://www.facebook.com/pg/cocokara.miho/',
+            ig: 'https://www.instagram.com/cocokara_miho/',
+            adress: '台南市中西區民權路二段61號(民權路二段與公園路的路口)',
+            phone: '06 222 2328',
+            open: '11:00 - 14:30<br>17:30 - 21:30<br>⛔️星期一',
+            isRepo: false,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: '',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            }
+          },
+          {
+            storeId: '',
+            isTasted: false,
+            location: '日本',
+            imgSrc: ':D',
+            name: '奧芝商店(okushiba)湯咖哩名店 (站前創成寺店)',
+            web: false,
+            fb: false,
+            ig: false,
+            adress: '札幌市中央区北4条西1丁目 (ホクレンビル B1F パールタウン飲食店街)',
+            phone: '011-207-0266',
+            open: '11:00〜22:00 (LO21:00)<br>⛔️不定休',
+            isRepo: false,
+            repo: [{
+              repoImg: '',
+              repoStar: '',
+              repoText: '',
+            }],
+            objClass: {
+              'chevron-rotate': false,
+            },
+            repoClass: {
+              'row-repo-show': false,
+            },
+          }
+        ],
+        searchText: '',
+        filterArray: [],
+        perPage: 3, //一頁幾筆資料
+        nowPage: 0, //當前頁
+        pageNumber: 0, //總頁數
+        pageNumArr: [],
+        dataAfterCut: [], //被分頁後的資料
+        filterDataAfterCut: [], //搜尋後被分頁的資料
+        thisPageShow: [], //一夜要秀的資料
+
+      },
+      mounted: function () {
+        this.start()
+      },
+      methods: {
+        start() {
+          this.filterArray = this.arrDataCurry
+          this.pageNum() //總頁碼
+          this.cutArr() //每頁顯示的資料
+        },
+
+        //搜尋列沒東西就顯示全資料
+        reset(s) {
+          let vm = this
+          if (s == false) {
+            vm.filterArray = vm.arrDataCurry
+          }
+        },
+
+        searchName(s) {
+          let vm = this
+          vm.filterArray = vm.arrDataCurry.filter(function (i) {
+            return i.name.includes(s)
+          })
+          // for (let i = 0; i < vm.pageNumber; i++) {
+          //   vm.dataAfterCut[i] = []
+          //   vm.dataAfterCut[i].push(vm.filterArray.slice(vm.perPage * i, vm.perPage * (i + 1)))
+          // }
+          // // console.log('vm.dataAfterCut', vm.dataAfterCut)
+          // vm.thisPageShow = vm.dataAfterCut[0][0]
+        },
+
+        filterLocation(lo, key) {
+          let vm = this
+          if (lo == '全部') {
+            vm.thisPageShow = vm.dataAfterCut[0][0]
+          } else {
+            vm.filterArray = vm.arrDataCurry.filter(function (item) {
+              return item.location.includes(lo)
+            })
+
+          }
+        },
+
+        clickRepo(item) {
+          item.objClass['chevron-rotate'] = !item.objClass['chevron-rotate'];
+          item.repoClass['row-repo-show'] = !item.repoClass['row-repo-show'];
+        },
+
+        //頁碼
+        pageNum() {
+          // console.log('iOOOO')
+          let vm = this
+          vm.pageNumber = Math.ceil(vm.filterArray.length / vm.perPage)//總頁，餘數也算是一頁，這裡用向上取整
+          for (let i = 1; i <= vm.pageNumber; i++) {
+            vm.pageNumArr.push(i + ' ')
+          }
+        },
+
+        //資料分頁顯示
+        cutArr() {
+          let vm = this
+          vm.dataAfterCut = []
+          for (let i = 0; i < vm.pageNumber; i++) {
+            vm.dataAfterCut[i] = []
+            vm.dataAfterCut[i].push(vm.filterArray.slice(vm.perPage * i, vm.perPage * (i + 1)))
+          }
+          console.log('vm.dataAfterCut', vm.dataAfterCut)
+          vm.thisPageShow = vm.dataAfterCut[0][0]
+
+        },
+
+        changePage(page) {
+          this.thisPageShow = this.dataAfterCut[page - 1][0]
+          this.nowPage = page
+        },
+
+        //
+        //上一頁
+        //跳轉指定頁
+        //下一頁
+        // pageNum: function (i) {
+        //   let perPage = 3//一頁幾筆資料
+        //   let countP = Math.ceil(i.length / perPage);//總頁，餘數也算是一頁，這裡用向上取整
+        //   let curPage = 0 //當前頁
+
+        //   // for (let i = 1; 1 <= countP, i++){}
+        //   console.log('countP', countP)
+        // }
+      },
+      computed: {
+
+
+
+      }
+    });
+  </script>
+</body>
+
+</html>
