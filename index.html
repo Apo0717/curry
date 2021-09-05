@@ -13,26 +13,26 @@
 
 <body>
   <div class="cate-bar">
-    <div class="cate cate-shadow">
+    <!-- <div class="cate cate-shadow">
       <img class="curry-icon" src="img/unnamed.gif" alt="">
       咖哩??
-    </div>
-    <div class="cate">好吃的拉麵</div>
+    </div> -->
+    <!-- <div class="cate">好吃的拉麵</div> -->
   </div>
   <div class="container" id="curryAll">
     <!-- 搜尋 -->
     <div class="search-bar">
-      <input class="search-input" type="text" placeholder="輸入店家名稱" v-model="searchText"
+      <input class="search-input" type="text" placeholder="輸入店家名稱" size="25" v-model="searchText"
         @keyup.enter="searchName(searchText)" @keyup="reset(searchText)">
-      <div class="search-btn" @click="searchName(searchText)">開始找</div>
+      <i class="fas fa-search" @click="searchName(searchText)"></i>
     </div>
     <!-- 表單 -->
     <div>
       <!-- 頭 -->
       <div class="row-head">
-        <div class="title-box bd-r eat-check cursor">
+        <!-- <div class="title-box bd-r eat-check cursor">
           <i class="fas fa-sort-down"></i>
-        </div>
+        </div> -->
         <div class="title-box bd-r location cursor" @click="isDrop = !isDrop">
           地點&nbsp&nbsp<i class="fas fa-sort-down"></i>
           <div class="dropdown-btn">
@@ -53,11 +53,11 @@
       <!-- 身體 -->
       <div class="row-body" v-for="(item,k) in thisPageShow" :key="k">
         <div class="d-f">
-          <div class="store-box eat-check">
+          <!-- <div class="store-box eat-check" @click="sortIstasted">
             <input type="checkbox" v-model="item.isTasted">
-          </div>
+          </div> -->
           <div class="store-box location">{{item.location}}</div>
-          <div class="store-box food-img"><img :src="imgSrc" alt="/"></div>
+          <div class="store-box food-img"><img class="food-img-100" :src="item.imgSrc" alt="/"></div>
           <div class="store-box name">{{item.name}}</div>
           <div class="store-box web">
             <a :href='item.web' target="_blank" title="店家網站">
@@ -99,11 +99,15 @@
       </div>
       <!-- 頁碼 -->
       <div class="d-f pages-num">
-        <button class="btn-page">上一頁</button>
-        <!-- {{pageNumber}}
-        {{pageNumArr}} -->
-        <div v-for="page in pageNumArr" @click.prevent="changePage(page)">{{page}} </div>
-        <button class="btn-page">下一頁</button>
+        <!-- 上一頁 -->
+        <button v-if="pageNumber!=1 && pageNumber>1" class="btn-page" @click.prevent="changePage(nowPage-1)">
+          <i class="fas fa-angle-double-left"></i>
+        </button>
+        <div :class="{'pages-num-r':page == nowPage }" class="pages-num-margin" v-for="page in pageNumArr" @click.prevent="changePage(page)">{{page}}</div>
+        <!-- 下一頁 -->
+        <button v-if="pageNumber!=1 && pageNumber>1" class="btn-page" @click.prevent="changePage(nowPage+1)">
+          <i class="fas fa-angle-double-right"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -123,7 +127,7 @@
             storeId: '',
             isTasted: false,
             location: '臺北 ／ 中山',
-            imgSrc: ':D',
+            imgSrc: 'img/01.jpg',
             name: '稻町家',
             web: false,
             fb: 'https://www.facebook.com/tongan.curry/',
@@ -148,7 +152,7 @@
             storeId: '',
             isTasted: false,
             location: '臺北 ／ 信義安和',
-            imgSrc: ':D',
+            imgSrc: 'img/02.jpg',
             name: '通庵熟成咖哩',
             web: false,
             fb: 'https://www.facebook.com/tongan.curry/',
@@ -158,8 +162,8 @@
             open: '12:00 - 14:30<br>17:30 - 21:30',
             isRepo: false,
             repo: [{
-              repoImg: '',
-              repoStar: '',
+              repoImg: 'img/09.jpg',
+              repoStar: '★★★★☆',
               repoText: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique ut dolorem molestias alias nonvoluptatum, animi consectetur blanditiis dicta nemo impedit? Possimus suscipit sit a quis? Ea doloribus,sed placeat, deleniti odio esse ullam dolore nesciunt enim neque fugiat, ducimus saepe accusamus inventorequisquam explicabo iure blanditiis vel fugit? Magnam, libero modi.Recusandae at neque perferendisrepudiandae dolore, magnam explicabo.',
             }],
             objClass: {
@@ -173,7 +177,7 @@
             storeId: '',
             isTasted: true,
             location: '新北／新莊',
-            imgSrc: ':D',
+            imgSrc: 'img/03.jpg',
             name: '喜歡咖哩',
             web: false,
             fb: 'https://www.facebook.com/Lovecurry0606/?ref=page_internal',
@@ -183,8 +187,8 @@
             open: '11:30 - 14:00<br>17:00 - 21:00',
             isRepo: false,
             repo: [{
-              repoImg: '',
-              repoStar: '',
+              repoImg: 'img/10.jpg',
+              repoStar: '★★★☆☆',
               repoText: '咖哩醬偏少...不夠熱，表現可以，但CP值普通，德腸好吃，金萱奶茶不要點。',
             }],
             objClass: {
@@ -199,7 +203,7 @@
             storeId: '',
             isTasted: false,
             location: '臺北 / 大安',
-            imgSrc: ':D',
+            imgSrc: 'img/04.jpg',
             name: '佐藤咖哩 (和平店)',
             web: false,
             fb: 'https://www.facebook.com/satocurry',
@@ -225,7 +229,7 @@
             storeId: '',
             isTasted: false,
             location: '臺北 / 大安',
-            imgSrc: ':D',
+            imgSrc: 'img/05.jpg',
             name: '佐藤咖哩 (復興店)',
             web: false,
             fb: 'https://www.facebook.com/satocurryfuxing/',
@@ -251,7 +255,7 @@
             storeId: '',
             isTasted: false,
             location: '臺北 / 大安',
-            imgSrc: ':D',
+            imgSrc: 'img/06.jpg',
             name: 'NoName 無名咖哩',
             web: false,
             fb: 'https://www.facebook.com/NoName%E5%92%96%E5%93%A9%E3%82%AB%E3%83%AC%E3%83%BC%E3%83%A9%E3%82%A4%E3%82%B9%E5%B0%88%E9%96%80%E5%BA%97-188120185122265',
@@ -276,7 +280,7 @@
             storeId: '',
             isTasted: false,
             location: '臺南 / 中西區',
-            imgSrc: ':D',
+            imgSrc: 'img/07.jpg',
             name: 'Cocokara cafe&湯咖哩',
             web: false,
             fb: 'https://www.facebook.com/pg/cocokara.miho/',
@@ -301,7 +305,7 @@
             storeId: '',
             isTasted: false,
             location: '日本',
-            imgSrc: ':D',
+            imgSrc: 'img/08.jpg',
             name: '奧芝商店(okushiba)湯咖哩名店 (站前創成寺店)',
             web: false,
             fb: false,
@@ -326,21 +330,27 @@
         searchText: '',
         filterArray: [],
         perPage: 3, //一頁幾筆資料
-        nowPage: 0, //當前頁
+        nowPage: 1, //當前頁
         pageNumber: 0, //總頁數
         pageNumArr: [],
         dataAfterCut: [], //被分頁後的資料
-        filterDataAfterCut: [], //搜尋後被分頁的資料
+        // filterDataAfterCut: [], //搜尋後被分頁的資料
         thisPageShow: [], //一夜要秀的資料
 
       },
+      created() {
+        // this.start();
+      },
+
       mounted: function () {
         this.start()
       },
+
       methods: {
         start() {
           this.filterArray = this.arrDataCurry
-          this.pageNum() //總頁碼
+          this.pageNum()
+          this.pageNumAll() //總頁碼
           this.cutArr() //每頁顯示的資料
         },
 
@@ -350,46 +360,68 @@
           if (s == false) {
             vm.filterArray = vm.arrDataCurry
           }
+          vm.resetPageNum()
         },
 
         searchName(s) {
           let vm = this
           vm.filterArray = vm.arrDataCurry.filter(function (i) {
             return i.name.includes(s)
+            // (i.name || i.location)  
           })
-          // for (let i = 0; i < vm.pageNumber; i++) {
-          //   vm.dataAfterCut[i] = []
-          //   vm.dataAfterCut[i].push(vm.filterArray.slice(vm.perPage * i, vm.perPage * (i + 1)))
-          // }
-          // // console.log('vm.dataAfterCut', vm.dataAfterCut)
-          // vm.thisPageShow = vm.dataAfterCut[0][0]
+          vm.resetPageNum()
         },
 
         filterLocation(lo, key) {
           let vm = this
           if (lo == '全部') {
-            vm.thisPageShow = vm.dataAfterCut[0][0]
+            vm.filterArray = vm.arrDataCurry
+            vm.cutArr()
           } else {
             vm.filterArray = vm.arrDataCurry.filter(function (item) {
               return item.location.includes(lo)
             })
-
+            vm.resetPageNum()
           }
         },
 
+        sortIstasted() {
+          let vm = this
+          vm.filterArray.isTasted.sort(function (t, f) {
+            // true values first
+            return (t === f) ? 0 : t ? -1 : 1;
+          })
+        },
+
+        //點開心得
         clickRepo(item) {
           item.objClass['chevron-rotate'] = !item.objClass['chevron-rotate'];
           item.repoClass['row-repo-show'] = !item.repoClass['row-repo-show'];
         },
 
-        //頁碼
+        //當資料更新，重新計算撈出來的資料並分頁
+        resetPageNum() {
+          this.nowPage = 1
+          this.pageNum()
+          this.pageNumAll()
+          this.cutArr()
+        },
+
+        //頁碼  
         pageNum() {
-          // console.log('iOOOO')
           let vm = this
           vm.pageNumber = Math.ceil(vm.filterArray.length / vm.perPage)//總頁，餘數也算是一頁，這裡用向上取整
+        },
+
+        //總頁碼
+        pageNumAll() {
+          console.log('iOOOO')
+          let vm = this
+          vm.pageNumArr = []
           for (let i = 1; i <= vm.pageNumber; i++) {
             vm.pageNumArr.push(i + ' ')
           }
+          return vm.pageNumArr
         },
 
         //資料分頁顯示
@@ -400,28 +432,20 @@
             vm.dataAfterCut[i] = []
             vm.dataAfterCut[i].push(vm.filterArray.slice(vm.perPage * i, vm.perPage * (i + 1)))
           }
-          console.log('vm.dataAfterCut', vm.dataAfterCut)
+          // console.log('vm.dataAfterCut', vm.dataAfterCut)
           vm.thisPageShow = vm.dataAfterCut[0][0]
-
         },
 
+        //切換頁面
         changePage(page) {
           this.thisPageShow = this.dataAfterCut[page - 1][0]
           this.nowPage = page
+          //頁碼不要變負數
+          if (this.nowPage < 1) { this.nowPage = 1 }
+          //頁碼不超過總頁碼
+          if (this.nowPage > this.pageNumber) { this.nowPage = this.pageNumber }
         },
 
-        //
-        //上一頁
-        //跳轉指定頁
-        //下一頁
-        // pageNum: function (i) {
-        //   let perPage = 3//一頁幾筆資料
-        //   let countP = Math.ceil(i.length / perPage);//總頁，餘數也算是一頁，這裡用向上取整
-        //   let curPage = 0 //當前頁
-
-        //   // for (let i = 1; 1 <= countP, i++){}
-        //   console.log('countP', countP)
-        // }
       },
       computed: {
 

@@ -9,9 +9,26 @@ body {
 }
 
 /* 上方分類標籤------------ */
-a{
+a {
   text-decoration: none;
 }
+
+input{
+  outline: none; /* 外框效果 */
+  caret-color: #ac1d3a; /* 輸入字的閃爍槓槓 */
+  padding: 10px 30px;
+  border-radius: 30px;
+  border:1px solid rgb(211, 203, 203);
+}
+
+/* 放大鏡 */
+.fa-search{
+ position: absolute;
+ top:10px;
+ left:200px;
+ cursor: pointer;
+}
+
 
 .d-f {
   display: flex;
@@ -32,7 +49,6 @@ a{
   background-color: #fff;
   position: absolute;
   top: 45px;
-  
 }
 
 .dropdown-content {
@@ -91,6 +107,7 @@ a{
 .search-bar {
   margin-bottom: 30px;
   display: flex;
+  position: relative;
   /* justify-content: flex-start;
   position: fixed;
   margin-bottom: 20px; */
@@ -132,6 +149,7 @@ a{
 
 .row-body:nth-child(odd) {
   background-color: rgb(255, 245, 221);
+  border-radius: 30px;
 }
 
 .store-box {
@@ -148,16 +166,25 @@ a{
   cursor: pointer;
 }
 
-.eat-check {
+/* .eat-check {
   width: 5%;
-}
+} */
 
 .location {
-  width: 12%;
+  width: 17%;
 }
 
 .food-img {
   width: 13%;
+  padding-right: 5px;
+  padding-left: 5px;
+  box-sizing: border-box;
+}
+
+.food-img-100 {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
 }
 
 .name {
@@ -208,14 +235,15 @@ a{
   display: flex;
 }
 
-.repoImg {
+/* .repoImg {
+  width: 350px;
+  
+  background-color: aqua;
+} */
+
+.repoImg-100 {
   width: 350px;
   height: 350px;
-  background-color: aqua;
-}
-
-.repoImg-100{
-  width: 100%;
   object-fit: cover;
 }
 
@@ -253,8 +281,25 @@ a{
 
 .pages-num {
   margin-top: 50px;
+  font-size: 20px;
+  justify-content: center;
 }
 
-.btn-page{
-  margin: 0 15px;
+.pages-num-margin{
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.pages-num-r{
+  color: #be1c1c;
+}
+
+.btn-page {
+  padding:0 20px;
+  margin: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  /* background-color: rgba(235, 190, 148, 0.8); */
+  color: rgba(235, 190, 148, 0.8);
+  cursor: pointer;
 }
