@@ -5,7 +5,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: rgb(236, 238, 231);
+  background-color: #eceee7;
 }
 
 /* 上方分類標籤------------ */
@@ -133,8 +133,8 @@ input{
   display: flex;
   background: linear-gradient(
     -217deg,
-    rgba(235, 190, 148, 0.8),
-    rgb(212, 150, 150) 70.71%
+    #ebbe94cc,
+    #d49696 70.71%
   );
   font-weight: 400;
   color: #fff;
@@ -148,7 +148,7 @@ input{
 }
 
 .row-body:nth-child(odd) {
-  background-color: rgb(255, 245, 221);
+  background-color: #fff5dd;
   border-radius: 30px;
 }
 

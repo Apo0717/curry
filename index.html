@@ -376,7 +376,7 @@
           let vm = this
           if (lo == '全部') {
             vm.filterArray = vm.arrDataCurry
-            vm.cutArr()
+            vm.resetPageNum()
           } else {
             vm.filterArray = vm.arrDataCurry.filter(function (item) {
               return item.location.includes(lo)
